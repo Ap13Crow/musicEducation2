@@ -17,6 +17,15 @@ hosting — persist everything in Taskade Projects. Reuse the already-installed
 **Goal:** make `src/pages/teacher/CourseBuilder.tsx` and `src/pages/student/CourseViewer.tsx`
 behave like a real learning-management flow, not a static outline.
 
+**Platform gotchas (read first — these are why a naive build fails):**
+- **Create the Taskade Projects first.** The generator will not invent the new data projects
+  (Lesson Progress, Quiz Questions, Quiz Attempts, Assignment Submissions, Certificates) on its
+  own — create them (below), then wire the UI to them.
+- **Build one phase at a time.** Ask the builder for Phase 1, verify it works, then Phase 2, and
+  so on. A single mega-request tends to produce a partial or non-functional build.
+- **Any external call (e.g. Google Classroom in Phase 5) is cross-origin** — route it through
+  `GenesisClient.proxy()` or a Taskade flow, never a direct browser `fetch()` (CORS).
+
 ### Create these new Taskade Projects and add their IDs to `src/config/app.ts`
 1. **Lesson Progress** — fields: `Student`, `Course`, `Lesson`, `Lesson ID`, `Status`
    (Not Started / In Progress / Completed), `Completed At`.
@@ -57,7 +66,7 @@ behave like a real learning-management flow, not a static outline.
 - **Embed** media inline: YouTube/Vimeo → responsive iframe, audio URLs → `<audio>` player,
   instead of link-out.
 - Render a lesson's `MusicXML URL` **inline** as notation (shared `<ScoreRenderer>` from the
-  Score Library prompt — OpenSheetMusicDisplay).
+  Score Library prompt — OpenSheetMusicDisplay, npm package `opensheetmusicdisplay`).
 
 ### Phase 4 — Sequencing, completion & rewards
 - **Conditional release:** a module unlocks when the previous module's lessons are complete

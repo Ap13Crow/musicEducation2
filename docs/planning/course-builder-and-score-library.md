@@ -273,8 +273,36 @@ OpenScore GitHub, PDMX, and Mutopia need no key (public).
 
 ---
 
+## Implementation notes & gotchas (post-first-build)
+
+**Europeana — which API do you actually need?** One free API key (`wskey`) works for all
+Europeana endpoints; you do **not** need a separate "content" API. Europeana is a *discovery +
+IIIF* layer — it returns **metadata and links to the object hosted at the providing library**,
+it does **not** host/serve the score files. Use:
+- **Search API** — `.../record/v2/search.json?wskey=KEY&query=...&qf=TYPE:IMAGE&reusability=open`
+  to find items (each hit has `edmPreview`, `edmIsShownBy`/`edmIsShownAt`, `rights`, dataset+local id).
+- **Record API** — `.../record/v2{id}.json?wskey=KEY` for one item's full metadata.
+- **IIIF Manifest API** — `https://iiif.europeana.eu/presentation{id}/manifest` to actually
+  display the scanned pages in an embeddable viewer.
+
+So: Europeana = discovery + IIIF viewing of scanned editions. For genuinely interactive,
+in-app *notation* you still use CC0 **MusicXML** (OpenScore/PDMX). Keep both tracks.
+
+**Why the IMSLP scraping / advanced API and the big Course-Builder module likely didn't build:**
+- **CORS.** A browser `fetch()` to `imslp.org` or `api.europeana.eu` is blocked cross-origin.
+  Any external call must go through **`GenesisClient.proxy()`** (keyed APIs) or a **Taskade
+  flow** (server-side). A client-side IMSLP fetch will silently fail — this is the #1 cause.
+- **IMSLP has no clean embed and its API is MediaWiki-shaped** (paged list endpoints + HTML),
+  so treat it as metadata + deep-link only; don't expect embedded PDFs.
+- **New Taskade Projects aren't auto-created**, and a single mega-prompt tends to yield a
+  partial build. Create the projects first, then submit **one phase at a time** and verify each.
+
+**API keys:** store the Europeana key only as the Taskade Workspace Secret `europeana` — never
+commit it to the repo or paste it where it's persisted. If a key has been shared in the clear,
+rotate it in the Europeana account settings.
+
 ## Sources
 - IMSLP API — https://imslp.org/wiki/IMSLP:API ; wrappers: https://github.com/jlumbroso/imslp , https://github.com/josefleventon/imslp-api
 - Europeana APIs (free key + IIIF, CC0 metadata) — https://pro.europeana.eu/page/apis , https://pro.europeana.eu/page/get-api , https://github.com/europeana/iiif-manifest-api
-- OpenScore (CC0 MusicXML) — https://fourscoreandmore.org/openscore/ ; Mutopia — https://www.musicxml.com/music-in-musicxml/ ; PDMX — https://arxiv.org/html/2409.10831v1
+- OpenScore (CC0 MusicXML) — https://fourscoreandmore.org/openscore/ ; Mutopia Project — https://www.mutopiaproject.org/ ; MusicXML sources list — https://www.musicxml.com/music-in-musicxml/ ; PDMX — https://arxiv.org/html/2409.10831v1
 - Google Classroom API + limitations — https://developers.google.com/workspace/classroom/guides/coursework-integration , https://ed.link/community/how-google-classroom-integration-differs-from-other-lmss/
