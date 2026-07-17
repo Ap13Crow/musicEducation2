@@ -72,7 +72,7 @@ export function PublicLayout() {
       <footer className="border-t border-border py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-xs text-muted-foreground">
           <p className="font-medium text-foreground/60 mb-1">{APP_NAME}</p>
-          <p>Practice Â· Theory Â· Performance</p>
+          <p>Practice · Theory · Performance</p>
         </div>
       </footer>
     </div>

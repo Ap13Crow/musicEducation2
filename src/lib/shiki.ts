@@ -1,5 +1,5 @@
 /**
- * Shiki highlighter — singleton with CDN-based language loading.
+ * Shiki highlighter  singleton with CDN-based language loading.
  *
  * Instead of importing from "shiki" (which bundles ALL ~200 language grammars
  * and ~50 themes as dynamic imports, producing 347 esbuild chunks), we use
@@ -7,7 +7,7 @@
  *   - 2 themes imported statically (github-light, github-dark)
  *   - Language grammars fetched from CDN on demand
  *
- * This reduces the chunk count from 347 → 0.
+ * This reduces the chunk count from 347 � 0.
  *
  * @see https://github.com/taskade/taskcade/issues/26056
  */
@@ -25,7 +25,7 @@ export type BundledLanguage = string;
 // Keep in sync with the shiki version in package.json
 const SHIKI_CDN_BASE = "https://esm.sh/@shikijs/langs@4.0.2/";
 
-// Singleton highlighter — created once, languages loaded incrementally
+// Singleton highlighter  created once, languages loaded incrementally
 let highlighterPromise: Promise<HighlighterCore> | null = null;
 
 function getOrCreateHighlighter(): Promise<HighlighterCore> {
@@ -55,11 +55,11 @@ async function ensureLanguage(
 
   const promise = (async () => {
     try {
-      // Dynamic CDN import — intentionally left as a runtime fetch, not bundled
+      // Dynamic CDN import  intentionally left as a runtime fetch, not bundled
       const mod = await import(`${SHIKI_CDN_BASE}${lang}.mjs`);
       await highlighter.loadLanguage(mod.default ?? mod);
     } catch {
-      // Language not available on CDN — will fall back to plaintext
+      // Language not available on CDN  will fall back to plaintext
     } finally {
       loadedLangs.add(lang); // Prevent retries, even on failure
       loadingLangs.delete(lang);

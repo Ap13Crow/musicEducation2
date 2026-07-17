@@ -8,7 +8,7 @@ const FEATURES = [
   { icon: GraduationCap, title: 'Expert Teachers', desc: 'Learn from accomplished musicians with proven teaching records and AI-evaluated pedagogy.' },
   { icon: BookOpen, title: 'Online Courses', desc: 'Structured courses from beginner to advanced, with AI-personalized learning paths.' },
   { icon: Ticket, title: 'Live Events', desc: 'Concerts, masterclasses, and workshops curated for your musical journey.' },
-  { icon: Sparkles, title: 'AI Evaluation', desc: 'Smart feedback on your playing — technique, musicality, and progress tracking.' },
+  { icon: Sparkles, title: 'AI Evaluation', desc: 'Smart feedback on your playing  technique, musicality, and progress tracking.' },
   { icon: Users, title: 'Community', desc: 'Connect with fellow musicians, share progress, and learn together in a safe space.' },
   { icon: Shield, title: 'Safe Environment', desc: 'AI-moderated chat and strict privacy controls protect every student.' },
 ];
@@ -38,7 +38,7 @@ export default function Landing() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
               {APP_NAME} combines expert teachers, structured courses, and live events with
-              AI-powered evaluation that shows you exactly how to improve — one practice session at a time.
+              AI-powered evaluation that shows you exactly how to improve  one practice session at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 mt-8">
               <button
@@ -123,7 +123,7 @@ export default function Landing() {
             onClick={() => auth.signinRedirect()}
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
           >
-            Get Started — It is Free
+            Get Started  It is Free
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

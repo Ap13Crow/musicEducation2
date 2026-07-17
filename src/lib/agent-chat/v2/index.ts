@@ -3,7 +3,7 @@
  *
  * Uses the AI SDK (`@ai-sdk/react`) with the `/chat` endpoint.
  *
- * IMPORTANT: `useChat` requires a real `Chat` instance — it crashes if passed undefined.
+ * IMPORTANT: `useChat` requires a real `Chat` instance  it crashes if passed undefined.
  * Always guard with a conditional render so `useChat` is only called after `chat` is created.
  *
  * @example

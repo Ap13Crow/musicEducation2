@@ -36,7 +36,7 @@ export default function AdminCourses() {
     <div className="p-6 lg:p-8 max-w-7xl">
       <header className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">Courses</h1>
-        <p className="text-muted-foreground mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''} · {courses.filter((c) => getFieldValue(c, 'Status') === 'Published').length} published</p>
+        <p className="text-muted-foreground mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''} � {courses.filter((c) => getFieldValue(c, 'Status') === 'Published').length} published</p>
       </header>
 
       <div className="relative mb-6">
@@ -63,7 +63,7 @@ export default function AdminCourses() {
                 <td className="px-4 py-3"><span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', CATEGORY_COLORS[getFieldValue(c, 'Category') ?? ''] ?? 'bg-muted text-muted-foreground')}>{getFieldValue(c, 'Category')}</span></td>
                 <td className="px-4 py-3"><span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', DIFFICULTY_COLORS[getFieldValue(c, 'Difficulty') ?? ''] ?? 'bg-muted text-muted-foreground')}>{getFieldValue(c, 'Difficulty')}</span></td>
                 <td className="px-4 py-3 text-muted-foreground">{getFieldValue(c, 'Instructor')}</td>
-                <td className="px-4 py-3 text-right tabular-nums">CHF {getFieldNumber(c, 'Price (CHF)')?.toFixed(0) ?? '—'}</td>
+                <td className="px-4 py-3 text-right tabular-nums">CHF {getFieldNumber(c, 'Price (CHF)')?.toFixed(0) ?? ''}</td>
                 <td className="px-4 py-3 text-right tabular-nums">{getFieldNumber(c, 'Duration (Weeks)')}</td>
               </tr>
             ))}

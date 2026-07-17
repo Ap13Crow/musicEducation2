@@ -19,7 +19,7 @@ const SESSION_KEY = 'mmc:session';
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 /* ------------------------------------------------------------------ */
-/*  Base32 (RFC 4648) — minimal encode/decode for TOTP secrets        */
+/*  Base32 (RFC 4648)  minimal encode/decode for TOTP secrets        */
 /* ------------------------------------------------------------------ */
 
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
@@ -129,7 +129,7 @@ export async function verifyTOTP(code: string, secretBase32: string): Promise<bo
   const now = Math.floor(Date.now() / 1000);
   const counter = Math.floor(now / TOTP_PERIOD);
 
-  // Check current and adjacent windows (±1)
+  // Check current and adjacent windows (�1)
   for (let offset = -1; offset <= 1; offset++) {
     const c = counter + offset;
     if (c < 0) continue;

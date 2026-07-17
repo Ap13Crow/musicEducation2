@@ -136,7 +136,7 @@ export function MFASetup() {
 
         <div className="flex items-center justify-center gap-2 mb-6">
           <code className="text-xs bg-muted px-2 py-1 rounded font-mono">
-            {showSecret ? secret : '••••••••••••••••'}
+            {showSecret ? secret : '""""""""""""""""'}
           </code>
           <button
             type="button"
@@ -180,7 +180,7 @@ export function MFASetup() {
             disabled={loading || code.length !== 6}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
-            {loading ? 'Verifying…' : 'Confirm'}
+            {loading ? 'Verifying&' : 'Confirm'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

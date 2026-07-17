@@ -32,7 +32,7 @@ export function createPersistentStore<T>(
   return create<T>()(
     persist(initializer, {
       // Spread caller options FIRST so the helper's guarantees below cannot be
-      // overridden — even by untyped/`as any` callers (the `Omit` type only
+      // overridden  even by untyped/`as any` callers (the `Omit` type only
       // stops typed ones). `name` keeps per-app namespacing.
       ...options,
       name,
@@ -49,7 +49,7 @@ export function createPersistentStore<T>(
  *
  * The unavailable case MUST resolve to an `undefined` `storage` option, not an
  * `undefined` return from the `createJSONStorage` getter: `createJSONStorage`
- * only bails out when the getter THROWS — if it merely returns `undefined`, it
+ * only bails out when the getter THROWS  if it merely returns `undefined`, it
  * still hands persist a storage wrapper around a missing backend, and every
  * subsequent `set()` would throw. With `storage: undefined`, persist itself
  * degrades to a plain non-persisted store instead of crashing.

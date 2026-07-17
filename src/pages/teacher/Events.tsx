@@ -62,7 +62,7 @@ export default function TeacherEvents() {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="w-3.5 h-3.5" /><span>{getFieldValue(ev, 'Venue')}</span></div>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-border">
-                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? '—'}</span>
+                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? ''}</span>
                   <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Get Tickets</button>
                 </div>
               </div>

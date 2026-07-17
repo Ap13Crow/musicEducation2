@@ -69,7 +69,7 @@ export default function Onboarding() {
             <Music className="w-7 h-7 text-primary" />
           </div>
           <h2 className="text-xl font-bold">Profile created</h2>
-          <p className="text-muted-foreground">Redirecting you to your dashboard…</p>
+          <p className="text-muted-foreground">Redirecting you to your dashboard&</p>
         </div>
       </div>
     );

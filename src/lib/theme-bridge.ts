@@ -31,7 +31,7 @@ function deriveDarkValue(key: string, hsl: string): string {
   if (parsed == null) return hsl;
   const { h, s, l } = parsed;
 
-  // Non-color variables â€” pass through unchanged
+  // Non-color variables  pass through unchanged
   if (key === '--radius') return hsl;
 
   // Derive dark-mode lightness based on the variable's role
@@ -39,22 +39,22 @@ function deriveDarkValue(key: string, hsl: string): string {
   let darkS = s;
 
   if (['--background', '--card', '--popover'].includes(key)) {
-    // Light backgrounds â†’ very dark
+    // Light backgrounds ’ very dark
     darkL = Math.max(3, Math.min(8, 100 - l));
   } else if (
     ['--foreground', '--card-foreground', '--popover-foreground'].includes(key)
   ) {
-    // Dark foregrounds â†’ very light
+    // Dark foregrounds ’ very light
     darkL = Math.min(95, Math.max(85, 100 - l));
   } else if (key === '--primary') {
-    // Invert: dark primary in light â†’ light primary in dark
+    // Invert: dark primary in light ’ light primary in dark
     darkL = l <= 50 ? Math.min(98, 100 - l) : Math.max(2, 100 - l);
   } else if (key === '--primary-foreground') {
     darkL = l > 50 ? Math.max(2, 100 - l) : Math.min(98, 100 - l);
   } else if (
     ['--accent', '--muted', '--border', '--input', '--ring'].includes(key)
   ) {
-    // Light accents/muted â†’ dark equivalents
+    // Light accents/muted ’ dark equivalents
     darkL = Math.max(10, Math.min(20, 100 - l));
     darkS = Math.min(s, 50);
   } else if (key === '--accent-foreground' || key === '--muted-foreground') {
@@ -107,7 +107,7 @@ export function setupThemeBridge() {
       const lightVars: Record<string, string> = {};
       const darkVars: Record<string, string> = {};
 
-      // Reset tracking â€” will be rebuilt from current vars
+      // Reset tracking  will be rebuilt from current vars
       appliedKeys.clear();
 
       for (const [key, value] of Object.entries(vars)) {
@@ -129,7 +129,7 @@ export function setupThemeBridge() {
       ) as HTMLStyleElement | null;
 
       if (Object.keys(lightVars).length === 0) {
-        // No vars â€” remove the style element entirely
+        // No vars  remove the style element entirely
         styleEl?.remove();
       } else {
         if (styleEl == null) {

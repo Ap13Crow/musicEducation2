@@ -19,8 +19,8 @@ import { toast as sonnerToast } from 'sonner';
  *   toast({ title, description })                         -> sonner(title, { description })
  *   toast({ title, description, variant: "destructive" }) -> sonner.error(title, { description })
  *
- * Sonner's static helpers (success/error/promise/dismiss/…) are carried over,
- * so `toast.success("…")` and `toast.dismiss()` keep working. New code can
+ * Sonner's static helpers (success/error/promise/dismiss/&) are carried over,
+ * so `toast.success("&")` and `toast.dismiss()` keep working. New code can
  * still `import { toast } from "sonner"` directly.
  */
 type ShadcnToastOptions = {

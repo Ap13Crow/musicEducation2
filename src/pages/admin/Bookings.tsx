@@ -85,7 +85,7 @@ export default function AdminBookings() {
                   <td className="px-4 py-3 text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
-                      {location || '—'}
+                      {location || ''}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{getFieldNumber(bk, 'Duration (min)')} min</td>
@@ -103,7 +103,7 @@ export default function AdminBookings() {
                         In Calendar
                       </span>
                     ) : (
-                      <span className="text-xs text-muted-foreground">—</span>
+                      <span className="text-xs text-muted-foreground"></span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">

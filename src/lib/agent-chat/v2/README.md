@@ -13,7 +13,7 @@ import type { UIMessage } from 'ai';
 import { useState } from 'react';
 import { ulid } from 'ulidx';
 
-// IMPORTANT: useChat requires a real Chat instance — it crashes if passed undefined.
+// IMPORTANT: useChat requires a real Chat instance  it crashes if passed undefined.
 // Split into two components so useChat is only called after chat is created.
 
 function ChatComponent() {
@@ -46,7 +46,7 @@ function ActiveChat({ chat }: { chat: ReturnType<typeof createAgentChat> }) {
         <div key={msg.id}>
           <strong>{msg.role === 'user' ? 'You' : 'Agent'}:</strong>
           {msg.parts.map((part, i) => {
-            // Always render all part types — the agent may use tools even if none
+            // Always render all part types  the agent may use tools even if none
             // are configured yet. Omitting this causes tool calls to be silently dropped.
             if (part.type === 'text') {
               return <span key={i}>{part.text}</span>;
@@ -93,7 +93,7 @@ Use these instead of building chat UI from scratch:
 | `CodeBlock` | `@/components/ai-elements/code-block` | Syntax-highlighted code with copy button |
 | `Tool` | `@/components/ai-elements/tool` | Collapsible tool call display with status |
 | `Confirmation` | `@/components/ai-elements/confirmation` | Tool call approval UI with approve/reject slots |
-| `Shimmer` | `@/components/ai-elements/shimmer` | Animated shimmer text — usage: `<Shimmer>Loading...</Shimmer>` (children must be a string) |
+| `Shimmer` | `@/components/ai-elements/shimmer` | Animated shimmer text  usage: `<Shimmer>Loading...</Shimmer>` (children must be a string) |
 
 See `@/components/ai-elements` for the full list of available components that you may use to build your chat UI.
 
@@ -179,7 +179,7 @@ function ActiveChat({ chat }: { chat: ReturnType<typeof createAgentChat> }) {
   );
 }
 
-// Always handle all part types — the agent may call tools even if none are configured
+// Always handle all part types  the agent may call tools even if none are configured
 // yet. Omitting isToolUIPart handling causes tool calls to be silently dropped.
 function MessageParts({
   message,
@@ -246,16 +246,16 @@ function MessageParts({
 
 ## Tool Call Approval
 
-Both examples above already include full approval handling — it is part of the standard
+Both examples above already include full approval handling  it is part of the standard
 `MessageParts` pattern and should always be present, even if the agent has no tools
 configured today. Tool call parts will simply never appear in that case; the code is inert.
 
 The approval flow is managed by two pieces:
 
-- **`Confirmation` + sub-components** (`@/components/ai-elements/confirmation`) — conditional
+- **`Confirmation` + sub-components** (`@/components/ai-elements/confirmation`)  conditional
   rendering driven by `part.state` and `part.approval`. No handler logic lives inside them.
-- **`addToolApprovalResponse`** (from `useChat`) — call with `{ id: part.approval.id, approved }`.
-  The `id` must be the tool part’s **`approval.id`**, not `toolCallId`; wrong `id` updates nothing.
+- **`addToolApprovalResponse`** (from `useChat`)  call with `{ id: part.approval.id, approved }`.
+  The `id` must be the tool parts **`approval.id`**, not `toolCallId`; wrong `id` updates nothing.
   `createAgentChat` then automatically sends the next request to the server.
 
 ### Approval state lifecycle
@@ -264,11 +264,11 @@ The approval flow is managed by two pieces:
 |---|---|
 | `approval-requested` | `<ConfirmationRequest>` + `<ConfirmationActions>` (approve/deny buttons) |
 | `approval-responded` | `<ConfirmationAccepted>` or `<ConfirmationRejected>` based on decision |
-| `output-available` | Tool completed — `<ToolOutput>` shows result |
-| `output-denied` | Tool was denied — `<ConfirmationRejected>` stays visible |
+| `output-available` | Tool completed  `<ToolOutput>` shows result |
+| `output-denied` | Tool was denied  `<ConfirmationRejected>` stays visible |
 
 Once `addToolApprovalResponse` is called, `createAgentChat` automatically sends the next
-request to the server — no manual trigger required.
+request to the server  no manual trigger required.
 
 ## API
 

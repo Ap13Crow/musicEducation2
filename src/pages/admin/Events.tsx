@@ -178,7 +178,7 @@ export default function AdminEvents() {
                   <div className="flex items-center gap-1.5"><Users className="w-3 h-3" /><span>{getFieldNumber(ev, 'Capacity')} seats</span></div>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-border">
-                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? '—'}</span>
+                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? ''}</span>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onClick={() => openEdit(ev)} className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors" aria-label="Edit"><Pencil className="w-3.5 h-3.5 text-muted-foreground" /></button>
                     <button onClick={() => handleDelete(ev)} className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors" aria-label="Delete"><Trash2 className="w-3.5 h-3.5 text-destructive" /></button>

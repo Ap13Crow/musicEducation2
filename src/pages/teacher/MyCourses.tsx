@@ -29,7 +29,7 @@ export default function TeacherMyCourses() {
     <div className="p-6 lg:p-8 max-w-7xl">
       <header className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">My Courses</h1>
-        <p className="text-muted-foreground mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''} · {enrollments.length} total enrollment{enrollments.length !== 1 ? 's' : ''}</p>
+        <p className="text-muted-foreground mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''} � {enrollments.length} total enrollment{enrollments.length !== 1 ? 's' : ''}</p>
       </header>
 
       {courses.length === 0 ? (
@@ -51,7 +51,7 @@ export default function TeacherMyCourses() {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><Clock className="w-3.5 h-3.5" /><span>{weeks} weeks</span></div>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-border">
-                  <span className="text-lg font-bold text-primary tabular-nums">CHF {price?.toFixed(0) ?? '—'}</span>
+                  <span className="text-lg font-bold text-primary tabular-nums">CHF {price?.toFixed(0) ?? ''}</span>
                   <span className="text-xs text-muted-foreground">{enrolled} enrolled</span>
                 </div>
               </button>

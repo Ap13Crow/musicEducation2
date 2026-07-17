@@ -16,7 +16,7 @@ import { getHighlighter } from "./shiki";
 // Re-use the theme names from the shared shiki singleton
 const THEMES = ["github-light", "github-dark"] as const;
 
-// Cache: key → tokens result
+// Cache: key � tokens result
 const cache = new Map<
   string,
   { bg?: string; fg?: string; tokens: unknown[][] }
@@ -56,13 +56,13 @@ export const code = {
   type: "code-highlighter" as const,
 
   supportsLanguage(_language: string): boolean {
-    // Accept all languages — unknown ones will fall back to plaintext
+    // Accept all languages  unknown ones will fall back to plaintext
     // after the CDN fetch fails.
     return true;
   },
 
   getSupportedLanguages(): string[] {
-    // Return empty — languages are loaded dynamically from CDN
+    // Return empty  languages are loaded dynamically from CDN
     return [];
   },
 
@@ -135,7 +135,7 @@ export const code = {
         subscribers.delete(key);
       });
 
-    // Not ready yet — Streamdown will show unhighlighted code
+    // Not ready yet  Streamdown will show unhighlighted code
     return null;
   },
 };

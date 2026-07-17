@@ -296,7 +296,7 @@ export function RecordsTable<Row extends RecordRow = RecordRow>({
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search records…"
+                  placeholder="Search records&"
                   className="pl-9"
                   aria-label="Search records"
                 />

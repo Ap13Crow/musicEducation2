@@ -97,7 +97,7 @@ export default function TeacherDetail() {
               <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">{name}</h1>
               <p className="text-muted-foreground mt-1 flex items-center gap-1.5">
                 <Music className="w-3.5 h-3.5" />
-                {instrument} Â· {specialization}
+                {instrument} · {specialization}
               </p>
 
               <div className="flex flex-wrap items-center gap-3 mt-4">
@@ -144,7 +144,7 @@ export default function TeacherDetail() {
           <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
             <Star className="w-4 h-4 text-amber-400" />
             <h2 className="text-sm font-semibold">Student Evaluations</h2>
-            <span className="text-xs text-muted-foreground ml-auto">{evaluations.length} total Â· avg {avgScore}%</span>
+            <span className="text-xs text-muted-foreground ml-auto">{evaluations.length} total · avg {avgScore}%</span>
           </div>
           <div className="divide-y divide-border">
             {evaluations.map((ev) => {

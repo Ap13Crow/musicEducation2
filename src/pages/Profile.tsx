@@ -196,7 +196,7 @@ function EvalItem({ node }: { node: GenesisNode }) {
           (score ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' :
           'bg-destructive/10 text-destructive',
         )}>
-          {score ?? '—'}%
+          {score ?? ''}%
         </span>
       </div>
       <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{notes}</p>

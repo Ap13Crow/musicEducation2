@@ -77,7 +77,7 @@ export default function TeacherDashboard() {
               return (
                 <div key={s.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                   <span className="text-sm font-medium">{name}</span>
-                  <p className="text-xs text-muted-foreground">{inst} Â· {skill}</p>
+                  <p className="text-xs text-muted-foreground">{inst} · {skill}</p>
                 </div>
               );
             })
@@ -89,7 +89,7 @@ export default function TeacherDashboard() {
             upcomingLessons.slice(0, 5).map((bk) => (
               <div key={bk.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                 <span className="text-sm font-medium block">{getFieldValue(bk, 'Student')}</span>
-                <p className="text-xs text-muted-foreground">{getFieldValue(bk, 'Instrument')} Â· {formatDate(getFieldValue(bk, 'Date & Time'))}</p>
+                <p className="text-xs text-muted-foreground">{getFieldValue(bk, 'Instrument')} · {formatDate(getFieldValue(bk, 'Date & Time'))}</p>
               </div>
             ))
           )}
@@ -101,7 +101,7 @@ export default function TeacherDashboard() {
               <div key={ev.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium truncate">{getFieldValue(ev, 'User')}</span>
-                  <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? 'â€”'}%</span>
+                  <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? ''}%</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">{getFieldValue(ev, 'Category')}</p>
               </div>
@@ -114,7 +114,7 @@ export default function TeacherDashboard() {
             data.myCourses.map((c) => (
               <div key={c.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                 <span className="text-sm font-medium block">{getFieldValue(c, 'Title') ?? c.title}</span>
-                <p className="text-xs text-muted-foreground">{getFieldValue(c, 'Difficulty')} Â· {getFieldNumber(c, 'Duration (Weeks)')} weeks</p>
+                <p className="text-xs text-muted-foreground">{getFieldValue(c, 'Difficulty')} · {getFieldNumber(c, 'Duration (Weeks)')} weeks</p>
               </div>
             ))
           )}

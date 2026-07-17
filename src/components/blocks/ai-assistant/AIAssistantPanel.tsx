@@ -133,7 +133,7 @@ export function AIAssistantPanel({
   onApprove,
   suggestions = DEFAULT_ASSISTANT_SUGGESTIONS,
   title = 'Assistant',
-  placeholder = 'Ask me anything about your jobs, customers, or invoices…',
+  placeholder = 'Ask me anything about your jobs, customers, or invoices&',
   emptyTitle = 'How can I help?',
   emptyDescription = 'Ask about your jobs, customers, or invoices - or pick a starter below.',
   className,
@@ -185,7 +185,7 @@ export function AIAssistantPanel({
                             className="text-muted-foreground my-1 flex flex-wrap items-center gap-2 text-xs"
                           >
                             <span className="italic">
-                              {toolDisplayTitle(part)} · {TOOL_STATE_LABELS[part.state]}
+                              {toolDisplayTitle(part)} � {TOOL_STATE_LABELS[part.state]}
                             </span>
                             {part.state === 'approval-requested' &&
                             part.approval != null &&

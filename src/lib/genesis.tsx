@@ -68,7 +68,7 @@ function ErrorFallback({
 }) {
   // Only show the raw error/stack inside Director Preview (where the builder
   // can act on it). In a published app the end-user is David's non-technical
-  // customer — they must never see a stack trace, only the friendly copy below.
+  // customer  they must never see a stack trace, only the friendly copy below.
   // In preview mode the full error is reported to "Fix with AI" via
   // reportGenesisError; in published mode reportGenesisError is a no-op
   // (the lifecycle logger is null).
@@ -128,7 +128,7 @@ function ErrorFallback({
 // ---------------------------------------------------------------------------
 
 /**
- * Genesis root wrapper — must be provided by the base template, not LLM-generated.
+ * Genesis root wrapper  must be provided by the base template, not LLM-generated.
  *
  * Wraps children in an ErrorBoundary that:
  * 1. Catches render-phase errors and shows {@link ErrorFallback} instead of a blank page.

@@ -49,7 +49,7 @@ export default function TeacherStudents() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-base">{name}</h3>
-                    <p className="text-xs text-muted-foreground">{instrument} Â· {skill}</p>
+                    <p className="text-xs text-muted-foreground">{instrument} · {skill}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">

@@ -36,7 +36,7 @@ export default function AdminStudents() {
             return (
               <div key={s.id} className="rounded-xl border border-border bg-card p-5">
                 <h3 className="font-semibold mb-2">{name}</h3>
-                <p className="text-xs text-muted-foreground mb-3">{inst} Â· {skill} Â· {membership}</p>
+                <p className="text-xs text-muted-foreground mb-3">{inst} · {skill} · {membership}</p>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="rounded-lg bg-muted/50 p-2 text-center">
                     <p className="text-sm font-bold tabular-nums">{xp.toLocaleString()}</p>

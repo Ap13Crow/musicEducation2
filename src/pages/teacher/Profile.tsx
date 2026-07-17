@@ -76,9 +76,9 @@ export default function TeacherProfile() {
             <div key={ev.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">{getFieldValue(ev, 'User')}</span>
-                <span className={`text-xs font-bold tabular-nums px-2 py-0.5 rounded-full ${(getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive'}`}>{getFieldNumber(ev, 'Score') ?? '—'}%</span>
+                <span className={`text-xs font-bold tabular-nums px-2 py-0.5 rounded-full ${(getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive'}`}>{getFieldNumber(ev, 'Score') ?? ''}%</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{getFieldValue(ev, 'Category')} · {getFieldValue(ev, 'AI Notes')}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{getFieldValue(ev, 'Category')} � {getFieldValue(ev, 'AI Notes')}</p>
             </div>
           ))}
           {data.myEvaluations.filter((e) => getFieldValue(e, 'Evaluated Role') === 'Student').length === 0 && <div className="px-4 py-8 text-center text-sm text-muted-foreground">No evaluations yet</div>}

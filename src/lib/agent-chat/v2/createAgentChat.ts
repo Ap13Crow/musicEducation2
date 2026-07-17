@@ -60,7 +60,7 @@ const MAX_HISTORY_MESSAGES = 6;
  *
  * Use with `useChat` from `@ai-sdk/react` to build chat interfaces.
  *
- * IMPORTANT: `useChat` requires a real `Chat` instance — it crashes if passed undefined.
+ * IMPORTANT: `useChat` requires a real `Chat` instance  it crashes if passed undefined.
  * Always guard with a conditional render so `useChat` is only called after `chat` is created.
  *
  * @param agentId - The agent ID
@@ -69,7 +69,7 @@ const MAX_HISTORY_MESSAGES = 6;
  * @returns A Chat instance ready to use with useChat
  *
  * Tool approval: `useChat`'s `addToolApprovalResponse` expects `{ id, approved }` where `id` is
- * `toolUIPart.approval.id` — **not** `toolCallId`. Passing `toolCallId` will not update any part.
+ * `toolUIPart.approval.id`  **not** `toolCallId`. Passing `toolCallId` will not update any part.
  *
  * @example
  * ```typescript

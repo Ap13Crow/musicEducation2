@@ -91,7 +91,7 @@ export default function StudentEvents() {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><Users className="w-3.5 h-3.5" /><span>{getFieldNumber(ev, 'Capacity')} seats</span></div>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-border">
-                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? '—'}</span>
+                  <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? ''}</span>
                   {(status === 'Upcoming' || status === 'Live Now') ? (
                     <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Get Tickets</button>
                   ) : (

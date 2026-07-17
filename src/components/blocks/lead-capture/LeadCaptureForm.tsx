@@ -188,7 +188,7 @@ const CONTACT_FIELDS: LeadField[] = [
     label: 'How can we help?',
     type: 'textarea',
     required: true,
-    placeholder: 'Tell us a bit about what you need…',
+    placeholder: 'Tell us a bit about what you need&',
   },
 ];
 
@@ -392,7 +392,7 @@ function LeadFieldControl({
               <Select value={String(rhfField.value ?? '')} onValueChange={rhfField.onChange}>
                 <FormControl>
                   <SelectTrigger className="w-full" onBlur={rhfField.onBlur}>
-                    <SelectValue placeholder={field.placeholder ?? 'Select…'} />
+                    <SelectValue placeholder={field.placeholder ?? 'Select&'} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

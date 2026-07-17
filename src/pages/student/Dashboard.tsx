@@ -110,7 +110,7 @@ export default function StudentDashboard() {
       <header className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">Welcome back, {profile?.displayName?.split(' ')[0] ?? 'Musician'}</h1>
         <p className="text-muted-foreground mt-1">
-          {nextLesson ? `Next lesson: ${formatDateShort(nextLesson.date)} with ${nextLesson.subtitle}` : 'No upcoming lessons — book one now'}
+          {nextLesson ? `Next lesson: ${formatDateShort(nextLesson.date)} with ${nextLesson.subtitle}` : 'No upcoming lessons  book one now'}
         </p>
       </header>
 
@@ -149,7 +149,7 @@ export default function StudentDashboard() {
 
               <div className="px-5 py-2 bg-muted/20"><span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Upcoming</span></div>
               {upcomingItems.length === 0 ? (
-                <div className="px-5 py-8 text-center text-sm text-muted-foreground">Nothing upcoming — your agenda is clear</div>
+                <div className="px-5 py-8 text-center text-sm text-muted-foreground">Nothing upcoming  your agenda is clear</div>
               ) : (
                 upcomingItems.map((item) => <AgendaRow key={item.id} item={item} />)
               )}
@@ -167,7 +167,7 @@ export default function StudentDashboard() {
                     <div key={ev.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium truncate">{getFieldValue(ev, 'Category')}</span>
-                        <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? '—'}%</span>
+                        <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? ''}%</span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{getFieldValue(ev, 'AI Notes')}</p>
                     </div>

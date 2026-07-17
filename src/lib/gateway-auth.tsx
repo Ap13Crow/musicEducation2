@@ -8,7 +8,7 @@ import { useAuth } from 'react-oidc-context';
  * Why this exists: the headless data gateway (`/api/taskade/.../nodes/*`, which
  * Director proxies to `/web-api/v1/gateways/<token>/...`) can optionally restrict
  * each request to the rows owned by the *verified* end-user (`SpaceApp` row
- * scoping — opt-in, default-OFF). That enforcement only works if the app actually
+ * scoping  opt-in, default-OFF). That enforcement only works if the app actually
  * presents the user's identity. Generated app code calls the gateway in many
  * styles (raw `fetch`, the global `axios`, `axios.create()` instances), so instead
  * of a shared client we attach the token at the network-primitive layer: we patch
@@ -16,21 +16,21 @@ import { useAuth } from 'react-oidc-context';
  * `Authorization: Bearer <id_token>`; every other request (third-party APIs,
  * static assets) is left untouched.
  *
- * Inert when no user is signed in (the token stays null → no header is added), so
+ * Inert when no user is signed in (the token stays null � no header is added), so
  * apps that don't use row scoping behave exactly as before.
  */
 
 // The latest verified end-user `id_token`, kept outside React so the patched
-// network primitives — which run outside the component tree — can read it.
+// network primitives  which run outside the component tree  can read it.
 let currentIdToken: string | null = null;
 
-/** Sync point for the React side — see {@link GatewayAuthSync}. */
+/** Sync point for the React side  see {@link GatewayAuthSync}. */
 export function setGatewayIdToken(token: string | null): void {
   currentIdToken = token;
 }
 
 /**
- * True only for requests to OUR first-party data gateway — never third-party
+ * True only for requests to OUR first-party data gateway  never third-party
  * APIs. The token must never leak off-site, so this guard is load-bearing.
  *  - published: same-origin `/api/taskade/*` (Director proxies it to the gateway)
  *  - dev/preview: a same-origin `/web-api/v1/gateways/*` path
@@ -113,7 +113,7 @@ function installGatewayAuthInterceptors(): void {
       try {
         this.setRequestHeader('Authorization', `Bearer ${currentIdToken}`);
       } catch {
-        // setRequestHeader throws if the request isn't OPENED — ignore and let
+        // setRequestHeader throws if the request isn't OPENED  ignore and let
         // it proceed unscoped rather than break the call.
       }
     }
@@ -127,7 +127,7 @@ installGatewayAuthInterceptors();
 
 /**
  * Bridges the OIDC user's `id_token` into the network interceptors above.
- * Renders nothing. Must live inside the OIDC `<AuthProvider>` — {@link GenesisAuth}
+ * Renders nothing. Must live inside the OIDC `<AuthProvider>`  {@link GenesisAuth}
  * mounts it automatically, so app authors don't need to wire it up.
  */
 export function GatewayAuthSync(): null {

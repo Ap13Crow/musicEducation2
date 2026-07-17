@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
-import { UserCircle, Flame, TrendingUp, Star, Music, GraduationCap, Sparkles, BookOpen, CreditCard, Award, ExternalLink, ArrowUpCircle, CalendarDays, Bookmark, Library } from 'lucide-react';
+import { UserCircle, Flame, TrendingUp, Star, Music, GraduationCap, Sparkles, BookOpen, CreditCard, Award, ArrowUpCircle, CalendarDays, Bookmark, Library, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { getNodes, getFieldValue, getFieldNumber } from '@/lib/genesis-data';
 import { PROJECTS } from '@/config/app';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { getSession } from '@/lib/auth';
 import type { GenesisNode } from '@/lib/genesis-data';
 import { cn } from '@/lib/utils';
-
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdwyAa8I03rEW4zkq6YKytgLUxzyP0vUtu8pj7N_Dz1FQJsJA/viewform?embedded=true';
-const FORM_OPEN_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdwyAa8I03rEW4zkq6YKytgLUxzyP0vUtu8pj7N_Dz1FQJsJA/viewform?usp=dialog';
 
 const CALENDAR_EMBED_URL = 'https://calendar.google.com/calendar/embed?src=students%40mymusic.coach&ctz=Europe%2FZurich';
 
@@ -94,7 +92,7 @@ export default function StudentProfile() {
               <div key={ev.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{getFieldValue(ev, 'Category')}</span>
-                  <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? '—'}%</span>
+                  <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? ''}%</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{getFieldValue(ev, 'AI Notes')}</p>
                 <p className="text-xs text-muted-foreground/70 mt-0.5">{formatDate(getFieldValue(ev, 'Evaluation Date'))}</p>
@@ -197,7 +195,7 @@ function CalendarSection() {
 }
 
 function TeacherApplicationSection() {
-  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="mt-8 rounded-xl border border-border bg-card overflow-hidden">
@@ -209,42 +207,18 @@ function TeacherApplicationSection() {
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold">Interested in teaching?</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Share your expertise with students. Apply to become a teacher on My Music Coach - our team will review your application and set up your teacher profile.
+              Share your expertise with students. Apply to become a teacher on My Music Coach - your profile, calendar, and booking system will be set up automatically.
             </p>
-            {!showForm && (
-              <button
-                onClick={() => setShowForm(true)}
-                className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 text-sm font-semibold hover:bg-amber-500/20 transition-colors"
-              >
-                <GraduationCap className="w-4 h-4" />
-                Start Teacher Application
-              </button>
-            )}
+            <button
+              onClick={() => navigate('/teacher-application')}
+              className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 text-sm font-semibold hover:bg-amber-500/20 transition-colors"
+            >
+              <GraduationCap className="w-4 h-4" />
+              Start Teacher Application
+            </button>
           </div>
         </div>
       </div>
-      {showForm && (
-        <>
-          <div className="px-5 py-2 border-t border-border flex items-center justify-between">
-            <span className="text-sm font-medium">Teacher Application Form</span>
-            <a
-              href={FORM_OPEN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
-            >
-              <ExternalLink className="w-3 h-3" />
-              Open in new tab
-            </a>
-          </div>
-          <iframe
-            src={GOOGLE_FORM_URL}
-            className="w-full border-0"
-            style={{ height: '600px' }}
-            title="Teacher Application Form"
-          />
-        </>
-      )}
     </div>
   );
 }

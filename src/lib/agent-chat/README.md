@@ -1,6 +1,6 @@
 # Agent Chat SDK (Legacy)
 
-> **DEPRECATED**: Do not use this SDK for new code. Use `@/lib/agent-chat/v2` instead — see `src/lib/agent-chat/v2/README.md` for docs.
+> **DEPRECATED**: Do not use this SDK for new code. Use `@/lib/agent-chat/v2` instead  see `src/lib/agent-chat/v2/README.md` for docs.
 
 ---
 

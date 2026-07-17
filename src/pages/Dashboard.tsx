@@ -242,7 +242,7 @@ function EvalRow({ node }: { node: GenesisNode }) {
           (score ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' :
           'bg-destructive/10 text-destructive',
         )}>
-          {score ?? 'â€”'}%
+          {score ?? ''}%
         </span>
       </div>
       <p className="text-xs text-muted-foreground mt-1">{cat}</p>
@@ -264,7 +264,7 @@ function BookingRow({ node }: { node: GenesisNode }) {
         <ChevronRight className="w-4 h-4 text-muted-foreground" />
       </div>
       <p className="text-xs text-muted-foreground mt-0.5">
-        {teacher} Â· {inst}
+        {teacher} · {inst}
       </p>
       <p className="text-xs text-muted-foreground/70">{formatDate(date)}</p>
     </div>
@@ -281,7 +281,7 @@ function EventRow({ node }: { node: GenesisNode }) {
     <div className="px-4 py-3 hover:bg-muted/30 transition-colors">
       <span className="text-sm font-medium truncate block">{title}</span>
       <p className="text-xs text-muted-foreground mt-0.5">
-        {cat}{venue ? ` Â· ${venue}` : ''}
+        {cat}{venue ? ` · ${venue}` : ''}
       </p>
       <p className="text-xs text-muted-foreground/70">{formatDate(date)}</p>
     </div>

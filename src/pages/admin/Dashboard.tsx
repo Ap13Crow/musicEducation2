@@ -64,9 +64,9 @@ export default function AdminDashboard() {
             <div key={ev.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium truncate">{getFieldValue(ev, 'User')}</span>
-                <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? 'â€”'}%</span>
+                <span className={cn('text-xs font-bold tabular-nums px-2 py-0.5 rounded-full', (getFieldNumber(ev, 'Score') ?? 0) >= 80 ? 'bg-emerald-500/10 text-emerald-400' : (getFieldNumber(ev, 'Score') ?? 0) >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-destructive/10 text-destructive')}>{getFieldNumber(ev, 'Score') ?? ''}%</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{getFieldValue(ev, 'Category')} Â· {getFieldValue(ev, 'Evaluated Role')}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{getFieldValue(ev, 'Category')} · {getFieldValue(ev, 'Evaluated Role')}</p>
             </div>
           ))}
         </Panel>
@@ -74,8 +74,8 @@ export default function AdminDashboard() {
         <Panel title="Upcoming Lessons" icon={CalendarDays}>
           {upcomingBookings.length === 0 ? <Empty text="No upcoming lessons" /> : upcomingBookings.map((bk) => (
             <div key={bk.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
-              <span className="text-sm font-medium">{getFieldValue(bk, 'Student')} â†’ {getFieldValue(bk, 'Teacher')}</span>
-              <p className="text-xs text-muted-foreground">{getFieldValue(bk, 'Instrument')} Â· {formatDate(getFieldValue(bk, 'Date & Time'))}</p>
+              <span className="text-sm font-medium">{getFieldValue(bk, 'Student')} ’ {getFieldValue(bk, 'Teacher')}</span>
+              <p className="text-xs text-muted-foreground">{getFieldValue(bk, 'Instrument')} · {formatDate(getFieldValue(bk, 'Date & Time'))}</p>
             </div>
           ))}
         </Panel>
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
                 <span className="text-sm font-medium truncate">{getFieldValue(p, 'User')}</span>
                 <span className="text-sm font-bold text-primary tabular-nums">CHF {getFieldNumber(p, 'Amount (CHF)')}</span>
               </div>
-              <p className="text-xs text-muted-foreground">{getFieldValue(p, 'Type')} Â· {getFieldValue(p, 'Payment Status')}</p>
+              <p className="text-xs text-muted-foreground">{getFieldValue(p, 'Type')} · {getFieldValue(p, 'Payment Status')}</p>
             </div>
           ))}
           {data.payments.length === 0 && <Empty text="No payments recorded" />}

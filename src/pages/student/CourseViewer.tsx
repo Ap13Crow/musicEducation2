@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, FileText, Music, Clock, CheckCircle, Circle, ChevronRight, BookOpen, Video, Headphones, PenTool, HelpCircle } from 'lucide-react';
-import { getNodes, getFieldValue, getFieldNumber } from '@/lib/genesis-data';
+import { ArrowLeft, Play, FileText, Music, Clock, CheckCircle, Circle, ChevronRight, BookOpen, Video, Headphones, PenTool, HelpCircle, X, ExternalLink } from 'lucide-react';
+import { getNodes, getFieldValue, getFieldNumber, createNode, updateNode } from '@/lib/genesis-data';
 import { PROJECTS } from '@/config/app';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import type { GenesisNode } from '@/lib/genesis-data';
 import { cn } from '@/lib/utils';
+import ScoreRenderer from '@/components/ScoreRenderer';
 
 interface ModuleData { node: GenesisNode; title: string; description: string; order: number; }
 interface LessonData { node: GenesisNode; title: string; content: string; moduleId: string; order: number; type: string; duration: number; mediaUrl: string; musicXmlUrl: string; }
@@ -23,6 +24,7 @@ const TYPE_LABELS: Record<string, string> = {
 export default function CourseViewer() {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
+  const { profile } = useCurrentUser();
   const [modules, setModules] = useState<ModuleData[]>([]);
   const [lessons, setLessons] = useState<LessonData[]>([]);
   const [courseTitle, setCourseTitle] = useState('');
@@ -30,19 +32,34 @@ export default function CourseViewer() {
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [selectedLesson, setSelectedLesson] = useState<LessonData | null>(null);
+  const enrollmentNodeId = useRef<string | null>(null);
+
+  const getYoutubeEmbedUrl = (url: string): string | null => {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  };
+
+  const getGoogleDriveEmbedUrl = (url: string): string | null => {
+    const match = url.match(/\/d\/([\w-]+)/);
+    return match ? `https://drive.google.com/file/d/${match[1]}/preview` : null;
+  }
 
   useEffect(() => {
     Promise.all([
       getNodes(PROJECTS.courses), getNodes(PROJECTS.courseModules),
-      getNodes(PROJECTS.courseLessons)
-    ]).then(([courseNodes, moduleNodes, lessonNodes]) => {
+      getNodes(PROJECTS.courseLessons), getNodes(PROJECTS.enrollments),
+    ]).then(([courseNodes, moduleNodes, lessonNodes, enrollmentNodes]) => {
       const course = courseNodes.find(n => n.id === courseId);
-      if (course) {
-        setCourseTitle(getFieldValue(course, 'Title') ?? '');
-        setCourseDesc(getFieldValue(course, 'Description') ?? '');
-      }
+      if (!course) { setLoading(false); return; }
+      const courseName = getFieldValue(course, 'Title') ?? '';
+      setCourseTitle(courseName);
+      setCourseDesc(getFieldValue(course, 'Description') ?? '');
       const mods: ModuleData[] = moduleNodes
-        .filter(m => getFieldValue(m, 'Course') === (course ? (getFieldValue(course, 'Title') ?? '') : ''))
+        .filter(m => {
+          const modCourseRef = getFieldValue(m, 'Course') ?? '';
+          return modCourseRef === courseId || modCourseRef === courseName;
+        })
         .map(m => ({ node: m, title: getFieldValue(m, 'Title') ?? '', description: getFieldValue(m, 'Description') ?? '', order: getFieldNumber(m, 'Order') ?? 0 }))
         .sort((a, b) => a.order - b.order);
       setModules(mods);
@@ -50,21 +67,88 @@ export default function CourseViewer() {
 
       const lns: LessonData[] = lessonNodes
         .filter(l => {
-          const modTitle = getFieldValue(l, 'Module') ?? '';
-          return mods.some(m => m.title === modTitle);
+          const modRef = getFieldValue(l, 'Module') ?? '';
+          return mods.some(m => m.node.id === modRef || m.title === modRef);
         })
-        .map(l => ({
-          node: l, title: getFieldValue(l, 'Title') ?? '', content: getFieldValue(l, 'Content') ?? '',
-          moduleId: mods.find(m => m.title === (getFieldValue(l, 'Module') ?? ''))?.node.id ?? '',
-          order: getFieldNumber(l, 'Order') ?? 0, type: getFieldValue(l, 'Type') ?? 'Reading',
-          duration: getFieldNumber(l, 'Duration (min)') ?? 0, mediaUrl: getFieldValue(l, 'Media URL') ?? '',
-          musicXmlUrl: getFieldValue(l, 'MusicXML URL') ?? '',
-        }))
+        .map(l => {
+          const modRef = getFieldValue(l, 'Module') ?? '';
+          const matchedMod = mods.find(m => m.node.id === modRef || m.title === modRef);
+          return {
+            node: l, title: getFieldValue(l, 'Title') ?? '', content: getFieldValue(l, 'Content') ?? '',
+            moduleId: matchedMod?.node.id ?? '',
+            order: getFieldNumber(l, 'Order') ?? 0, type: getFieldValue(l, 'Type') ?? 'Reading',
+            duration: getFieldNumber(l, 'Duration (min)') ?? 0, mediaUrl: getFieldValue(l, 'Media URL') ?? '',
+            musicXmlUrl: getFieldValue(l, 'MusicXML URL') ?? '',
+          };
+        })
         .sort((a, b) => a.order - b.order);
       setLessons(lns);
+
+      // Restore completed lessons from enrollment
+      const studentEmail = profile?.email ?? '';
+      const enrollment = enrollmentNodes.find(
+        e => getFieldValue(e, 'Course') === courseName && getFieldValue(e, 'Student') === studentEmail,
+      );
+      if (enrollment) {
+        enrollmentNodeId.current = enrollment.id;
+        const stored = getFieldValue(enrollment, 'Completed Lesson IDs');
+        if (stored) {
+          try {
+            const ids: string[] = JSON.parse(stored);
+            const validIds = ids.filter((id: string) => lns.some(l => l.node.id === id));
+            setCompletedLessons(new Set(validIds));
+          } catch { /* corrupt data, start fresh */ }
+        }
+      }
+
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [courseId]);
+  }, [courseId, profile]);
+
+  const persistProgress = useCallback(async (
+    currentCompleted: Set<string>,
+    course: string,
+    total: number,
+  ) => {
+    const studentEmail = profile?.email;
+    if (studentEmail == null) return;
+
+    const progress = total > 0 ? Math.round((currentCompleted.size / total) * 100) : 0;
+    const fields: Record<string, string> = {
+      'Completed Lesson IDs': JSON.stringify([...currentCompleted]),
+      'Progress %': String(progress),
+    };
+
+    let nodeId = enrollmentNodeId.current;
+    if (nodeId == null) {
+      // Find or create the enrollment
+      const enrs = await getNodes(PROJECTS.enrollments);
+      const existing = enrs.find(
+        e => getFieldValue(e, 'Course') === course && getFieldValue(e, 'Student') === studentEmail,
+      );
+      if (existing) {
+        nodeId = existing.id;
+        enrollmentNodeId.current = nodeId;
+      } else {
+        fields['Student'] = studentEmail;
+        fields['Course'] = course;
+        fields['Status'] = 'Active';
+        await createNode(PROJECTS.enrollments, fields);
+
+        // Refetch to capture the new node ID for subsequent toggles
+        const refreshed = await getNodes(PROJECTS.enrollments);
+        const created = refreshed.find(
+          e => getFieldValue(e, 'Course') === course && getFieldValue(e, 'Student') === studentEmail,
+        );
+        if (created) {
+          enrollmentNodeId.current = created.id;
+        }
+        return;
+      }
+    }
+
+    await updateNode(PROJECTS.enrollments, nodeId, fields);
+  }, [profile]);
 
   const toggleModule = (id: string) => {
     setExpandedModules(prev => {
@@ -78,6 +162,7 @@ export default function CourseViewer() {
     setCompletedLessons(prev => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
+      persistProgress(next, courseTitle, lessons.length);
       return next;
     });
   };
@@ -134,7 +219,7 @@ export default function CourseViewer() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-sm font-semibold truncate">{mod.title}</h3>
-                    <p className="text-xs text-muted-foreground">{modLessons.length} lessons{modCompleted > 0 && ` Â· ${modCompleted} completed`}</p>
+                    <p className="text-xs text-muted-foreground">{modLessons.length} lessons{modCompleted > 0 && ` · ${modCompleted} completed`}</p>
                   </div>
                 </div>
                 <ChevronRight className={cn('w-4 h-4 text-muted-foreground transition-transform shrink-0', expanded && 'rotate-90')} />
@@ -145,9 +230,24 @@ export default function CourseViewer() {
                   {modLessons.map(lesson => {
                     const TypeIcon = TYPE_ICONS[lesson.type] ?? FileText;
                     const done = completedLessons.has(lesson.node.id);
+                    const isSelected = selectedLesson?.node.id === lesson.node.id;
                     return (
-                      <div key={lesson.node.id} className="flex items-start gap-3 p-4 hover:bg-muted/20 transition-colors">
-                        <button onClick={() => toggleLesson(lesson.node.id)} className="mt-0.5 shrink-0">
+                      <div
+                        key={lesson.node.id}
+                        onClick={() => setSelectedLesson(isSelected ? null : lesson)}
+                        className={cn(
+                          'flex items-start gap-3 p-4 transition-colors cursor-pointer',
+                          isSelected ? 'bg-primary/5 border-l-2 border-l-primary' : 'hover:bg-muted/20',
+                        )}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedLesson(isSelected ? null : lesson); }}}
+                      >
+                        <button
+                          onClick={(e) => { e.stopPropagation(); toggleLesson(lesson.node.id); }}
+                          className="mt-0.5 shrink-0"
+                          aria-label={done ? 'Mark as incomplete' : 'Mark as complete'}
+                        >
                           {done
                             ? <CheckCircle className="w-5 h-5 text-primary" />
                             : <Circle className="w-5 h-5 text-muted-foreground/40" />
@@ -179,6 +279,76 @@ export default function CourseViewer() {
           );
         })}
       </div>
+
+      {selectedLesson && (
+        <div className="rounded-xl border border-primary/20 bg-card overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                {(() => { const Icon = TYPE_ICONS[selectedLesson.type] ?? FileText; return <Icon className="w-4 h-4 text-primary" />; })()}
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold">{selectedLesson.title}</h3>
+                <p className="text-xs text-muted-foreground">
+                  {TYPE_LABELS[selectedLesson.type] ?? selectedLesson.type}
+                  {selectedLesson.duration > 0 && ` · ${selectedLesson.duration} min`}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setSelectedLesson(null)}
+              className="p-1.5 rounded-md hover:bg-muted transition-colors shrink-0"
+              aria-label="Close lesson detail"
+            >
+              <X className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-6">
+            {selectedLesson.content && (
+              <div className="prose prose-sm max-w-none text-foreground/90 leading-relaxed whitespace-pre-line">
+                {selectedLesson.content}
+              </div>
+            )}
+
+            {selectedLesson.mediaUrl && (() => {
+              const youtubeEmbed = getYoutubeEmbedUrl(selectedLesson.mediaUrl);
+              const driveEmbed = getGoogleDriveEmbedUrl(selectedLesson.mediaUrl);
+              const embedUrl = youtubeEmbed ?? driveEmbed ?? null;
+
+              return embedUrl ? (
+                <div className="rounded-lg overflow-hidden border border-border bg-black/5 aspect-video">
+                  <iframe
+                    src={embedUrl}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={selectedLesson.title}
+                  />
+                </div>
+              ) : (
+                <a
+                  href={selectedLesson.mediaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                >
+                  <ExternalLink className="w-4 h-4" /> Open media
+                </a>
+              );
+            })()}
+
+            {selectedLesson.musicXmlUrl && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <Music className="w-3.5 h-3.5" /> Sheet Music
+                </div>
+                <ScoreRenderer musicXmlUrl={selectedLesson.musicXmlUrl} className="bg-white/50 dark:bg-black/20 rounded-lg p-4" />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {modules.length === 0 && (
         <div className="text-center py-16">

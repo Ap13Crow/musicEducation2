@@ -1,17 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, BookOpen, Music, Bookmark, FileText, Tag, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, ExternalLink, BookOpen, Music, Bookmark, FileText, Tag, AlertTriangle, RefreshCw, Globe, Shield } from 'lucide-react';
 import { getNodes, getFieldValue, getFieldNumber, createNode, deleteNode } from '@/lib/genesis-data';
 import { PROJECTS } from '@/config/app';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import type { GenesisNode } from '@/lib/genesis-data';
 import { cn } from '@/lib/utils';
+import ScoreRenderer from '@/components/ScoreRenderer';
 
 interface ScoreData {
   node: GenesisNode;
   title: string; composer: string; era: string; instrument: string;
   difficulty: string; genre: string; keySignature: string; pages: number;
   description: string; imslpUrl: string; gdriveUrl: string;
+  source: string; license: string; europeanaId: string;
+  musicXmlUrl: string;
 }
 
 const ERA_COLORS: Record<string, string> = {
@@ -66,6 +69,10 @@ export default function ScoreDetail() {
         description: getFieldValue(s, 'Description') ?? '',
         imslpUrl: getFieldValue(s, 'IMSLP URL') ?? '',
         gdriveUrl: getFieldValue(s, 'Google Drive PDF URL') ?? '',
+        source: getFieldValue(s, 'Source') ?? '',
+        license: getFieldValue(s, 'License') ?? '',
+        europeanaId: getFieldValue(s, 'Europeana ID') ?? '',
+        musicXmlUrl: getFieldValue(s, 'MusicXML URL') ?? '',
       });
     } catch (err) {
       console.error('[ScoreDetail]', err);
@@ -159,6 +166,18 @@ export default function ScoreDetail() {
             {score.difficulty && <span className={cn('px-2.5 py-1 rounded-md text-xs font-medium', DIFF_COLORS[score.difficulty] ?? 'bg-muted')}>{score.difficulty}</span>}
             {score.genre && <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground">{score.genre}</span>}
             {score.keySignature && <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground">{score.keySignature}</span>}
+            {score.source && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                <Globe className="w-3 h-3" />
+                {score.source}
+              </span>
+            )}
+            {score.license && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                <Shield className="w-3 h-3" />
+                {score.license}
+              </span>
+            )}
           </div>
 
           {score.description && (
@@ -200,9 +219,20 @@ export default function ScoreDetail() {
         <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
           <BookOpen className="w-4 h-4 text-primary" />
           <h2 className="text-sm font-semibold">Score Viewer</h2>
+          {score.musicXmlUrl && (
+            <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded ml-auto">Interactive</span>
+          )}
         </div>
 
-        {score.gdriveUrl ? (
+        {score.musicXmlUrl ? (
+          <div className="p-4">
+            <ScoreRenderer musicXmlUrl={score.musicXmlUrl} className="min-h-[500px]" />
+            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Interactive notation  transposable &amp; playable</span>
+              <span className="text-[10px] text-muted-foreground/60">Powered by OpenSheetMusicDisplay</span>
+            </div>
+          </div>
+        ) : score.gdriveUrl ? (
           <div className="p-0">
             <iframe
               src={score.gdriveUrl.replace(/\/view(\?.*)?$/, '/preview').replace('drive.google.com/open?id=', 'drive.google.com/file/d/') + '/preview'}
@@ -225,8 +255,10 @@ export default function ScoreDetail() {
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
                   {score.imslpUrl
-                    ? 'IMSLP does not allow embedding. Use the button below to view and download on IMSLP, or upload a PDF to Google Drive.'
-                    : 'No PDF or IMSLP link available for this score yet.'
+                    ? 'IMSLP does not allow embedding. View and download on IMSLP, or add a MusicXML URL for interactive notation.'
+                    : score.europeanaId
+                    ? 'View this score on Europeana to download it, then add a MusicXML or PDF URL for in-app viewing.'
+                    : 'No viewer data available for this score yet. Use the Import tab in the Music Library to find CC0 scores from Europeana.'
                   }
                 </p>
               </div>
@@ -242,23 +274,17 @@ export default function ScoreDetail() {
                     View on IMSLP
                   </a>
                 )}
-                <button
-                  onClick={async () => {
-                    try {
-                      const res = await fetch(`/api/taskade/projects/${PROJECTS.musicScores}/nodes/${score.node.id}/comment`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ content: `[Scraper Trigger] Requesting first-page scrape for IMSLP: ${score.imslpUrl}` }),
-                      });
-                      if (res.ok) alert('Scrape request queued — check back soon for the PDF.');
-                      else alert('Could not queue scrape request.');
-                    } catch { alert('Could not connect to scrape service.'); }
-                  }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm font-medium hover:bg-muted/50 transition-colors"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Request Page Scrape
-                </button>
+                {score.europeanaId && (
+                  <a
+                    href={`https://www.europeana.eu/item${score.europeanaId}?utm_source=api&utm_medium=api&utm_campaign=omesisitand`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm font-medium hover:bg-muted/50 transition-colors"
+                  >
+                    <Globe className="w-4 h-4" />
+                    View on Europeana
+                  </a>
+                )}
               </div>
             </div>
           </div>

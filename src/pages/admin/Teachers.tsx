@@ -35,9 +35,9 @@ export default function AdminTeachers() {
             return (
               <div key={t.id} className="rounded-xl border border-border bg-card p-5">
                 <h3 className="font-semibold mb-1">{name}</h3>
-                <p className="text-xs text-muted-foreground mb-3">{inst} · {spec}</p>
+                <p className="text-xs text-muted-foreground mb-3">{inst} � {spec}</p>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1"><Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /><span className="text-sm font-medium tabular-nums">{rating?.toFixed(1) ?? '—'}</span></div>
+                  <div className="flex items-center gap-1"><Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /><span className="text-sm font-medium tabular-nums">{rating?.toFixed(1) ?? ''}</span></div>
                   <span className="text-sm text-muted-foreground">CHF {rate}/hr</span>
                 </div>
               </div>

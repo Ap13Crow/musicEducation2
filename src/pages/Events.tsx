@@ -133,7 +133,7 @@ function EventCard({ node }: { node: GenesisNode }) {
 
       <div className="flex items-center justify-between pt-3 border-t border-border">
         <span className="text-lg font-bold text-primary tabular-nums">
-          CHF {price?.toFixed(0) ?? '—'}
+          CHF {price?.toFixed(0) ?? ''}
         </span>
         {status === 'Upcoming' || status === 'Live Now' ? (
           <button className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">

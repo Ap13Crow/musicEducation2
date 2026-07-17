@@ -61,7 +61,7 @@ export default function PublicEvents() {
                 <div className="flex items-center gap-2 text-xs text-muted-foreground"><Users className="w-3.5 h-3.5" /><span>{getFieldNumber(ev, 'Capacity')} seats</span></div>
               </div>
               <div className="flex items-center justify-between pt-3 border-t border-border">
-                <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? '—'}</span>
+                <span className="text-lg font-bold text-primary tabular-nums">CHF {getFieldNumber(ev, 'Price (CHF)')?.toFixed(0) ?? ''}</span>
                 <span className="text-xs text-muted-foreground">Sign in to book</span>
               </div>
             </div>

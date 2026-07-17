@@ -145,7 +145,7 @@ export default function TeacherDirectory() {
                     <button onClick={() => navigate(`/discover/teachers/${t.node.id}`)} className="text-left hover:text-primary transition-colors">
                       <h3 className="font-semibold text-base">{t.name}</h3>
                     </button>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5"><Music className="w-3 h-3" />{t.instrument} Â· {t.specialization}</p>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5"><Music className="w-3 h-3" />{t.instrument} · {t.specialization}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <div className="flex items-center gap-0.5">
