@@ -297,6 +297,18 @@ in-app *notation* you still use CC0 **MusicXML** (OpenScore/PDMX). Keep both tra
 - **New Taskade Projects aren't auto-created**, and a single mega-prompt tends to yield a
   partial build. Create the projects first, then submit **one phase at a time** and verify each.
 
+**Diagnosis against the current repo (verified):** as of this branch, *none* of the
+Taskade-generated work has landed in GitHub — `origin/main` is still the initial commit,
+**`GenesisClient.proxy()` is called nowhere** (so no Europeana/IMSLP API is actually wired),
+and the only IMSLP "scraper" is the dead comment-POST hack at `ScoreDetail.tsx:251` with no
+flow consuming it. `CourseBuilder.tsx` is still the thin CRUD (the `Quiz`/`Certificate`
+strings are just lesson-type labels, not an engine). So the practical reasons the IMSLP
+scraping and the Moodle-style module "don't work" are: (a) they were never built into code
+here, and (b) even the stub that exists can't reach IMSLP from the browser (CORS) and has no
+server-side flow. **Also check that your Taskade project is actually syncing to this GitHub
+repo** — if generated builds aren't appearing on `main`, the repo and the live Taskade app are
+decoupled, which would explain seeing no changes at all.
+
 **API keys:** store the Europeana key only as the Taskade Workspace Secret `europeana` — never
 commit it to the repo or paste it where it's persisted. If a key has been shared in the clear,
 rotate it in the Europeana account settings.
